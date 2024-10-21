@@ -1,0 +1,5 @@
+name: VisualDriver
+main: me.fortibrine.visualdriver.bukkit.VisualDriverPlugin
+version: 1.0
+
+depend: [ProtocolLib]

@@ -1,0 +1,13 @@
+[versions]
+minecraft-forge = "1.12.2-14.23.5.2859"
+forge-gradle = "[6.0.24,6.2)"
+spigot = "1.12.2-R0.1-SNAPSHOT"
+protocollib = "5.1.0"
+
+[libraries]
+minecraft-forge = { module = "net.minecraftforge:forge", version.ref = "minecraft-forge" }
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+protocollib = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib" }
+
+[plugins]
+forge-gradle = { id = "net.minecraftforge.gradle", version.ref = "forge-gradle" }
