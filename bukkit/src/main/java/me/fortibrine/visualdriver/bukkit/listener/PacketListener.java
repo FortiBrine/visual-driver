@@ -19,7 +19,7 @@ public class PacketListener extends PacketAdapter {
 
         String channel = packet.getStrings().read(0);
 
-        plugin.getLogger().info(channel);
+//        plugin.getLogger().info(channel);
     }
 
 }

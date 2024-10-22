@@ -8,16 +8,14 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 
+@NoArgsConstructor
 public class HudScreenBuilder {
 
     private final ByteBuf buffer = Unpooled.buffer();
     private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-
-    public HudScreenBuilder() {
-
-    }
 
     public HudScreenBuilder text(String text, int x, int y, int color) {
         buffer.writeCharSequence("text", Charsets.UTF_8);
@@ -28,7 +26,13 @@ public class HudScreenBuilder {
         return this;
     }
 
+    public HudScreenBuilder build() {
+        buffer.writeCharSequence("end", Charsets.UTF_8);
+        return this;
+    }
+
     public void apply(Player player) {
+
         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
 
         packet.getStrings().write(0, "visualdriver:hud");

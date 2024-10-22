@@ -4,12 +4,14 @@ forge-gradle = "[6.0.24,6.2)"
 spigot = "1.12.2-R0.1-SNAPSHOT"
 protocollib = "5.1.0"
 netty = "4.1.9.Final"
+lombok = "1.18.20"
 
 [libraries]
 minecraft-forge = { module = "net.minecraftforge:forge", version.ref = "minecraft-forge" }
 spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
 protocollib = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib" }
 netty = { module = "io.netty:netty-all", version.ref = "netty" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 [plugins]
 forge-gradle = { id = "net.minecraftforge.gradle", version.ref = "forge-gradle" }
