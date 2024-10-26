@@ -1,7 +1,7 @@
 dependencies {
     compileOnly(libs.spigot)
     compileOnly(libs.protocollib)
-    compileOnly(libs.netty)
+    implementation(project(":common"))
 }
 
 tasks {

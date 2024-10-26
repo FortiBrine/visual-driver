@@ -6,14 +6,15 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
+import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.forge.VisualDriverMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketCustomPayload;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 @ChannelHandler.Sharable
@@ -36,24 +37,42 @@ public class PacketListener extends SimpleChannelInboundHandler<Packet<?>> {
             SPacketCustomPayload packet = (SPacketCustomPayload) msg;
             ByteBuf byteBuf = packet.getBufferData();
 
-            player.sendMessage(new TextComponentString(packet.getChannelName()));
+//            player.sendMessage(new TextComponentString(packet.getChannelName()));
 
             if (!packet.getChannelName().equals("visualdriver:hud")) {
                 ctx.fireChannelRead(msg);
                 return;
             }
 
-            String element;
-            while (!(element = ByteBufUtils.readUTF8String(byteBuf)).equals("end")) {
-                if (element.equals("text")) {
-                    String text = ByteBufUtils.readUTF8String(byteBuf);
-                    int x = byteBuf.readInt();
-                    int y = byteBuf.readInt();
-                    int color = byteBuf.readInt();
+            JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
 
-                    mod.getHudManager().getDrawActions().clear();
-                    mod.getHudManager().getDrawActions().add((partialTicks) -> Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color));
+            String drawMode = ldoinBuffer.readString();
+
+            mod.getHudManager().getTextDrawActions().clear();
+            mod.getHudManager().getDrawActions().clear();
+
+            while (!drawMode.equals("end")) {
+
+                if (drawMode.equals("text")) {
+                    String text = ldoinBuffer.readString();
+                    int x = ldoinBuffer.readVarInt();
+                    int y = ldoinBuffer.readVarInt();
+                    int color = ldoinBuffer.readVarInt();
+
+                    mod.getHudManager().getTextDrawActions().add((partialTicks) -> Minecraft.getMinecraft().fontRenderer.drawString(text, x, y, color));
+                } else if (drawMode.equals("rectangle")) {
+                    int x1 = ldoinBuffer.readVarInt();
+                    int y1 = ldoinBuffer.readVarInt();
+                    int x2 = ldoinBuffer.readVarInt();
+                    int y2 = ldoinBuffer.readVarInt();
+                    int color = ldoinBuffer.readVarInt();
+
+                    mod.getHudManager().getDrawActions().add((partialTicks) -> {
+                        Gui.drawRect(x1, y1, x2, y2, color);
+                    });
                 }
+
+                drawMode = ldoinBuffer.readString();
             }
         }
 

@@ -8,3 +8,4 @@ pluginManagement {
 rootProject.name = "visual-driver"
 include("forge")
 include("bukkit")
+include("common")

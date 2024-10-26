@@ -22,6 +22,7 @@ public class PlayerJoinListener implements Listener {
                 () -> {
                     new HudScreenBuilder()
                             .text("hello, world", 10, 10, 0xFF0000FF)
+                            .rectangle(0, 0, 40, 40, 0x000000FF)
                             .apply(player);
                 },
                 20L, 20L
