@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "visual-driver",
+  "version": "1.0",
+  "name": "Visual Driver",
+
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["me.fortibrine.visualdriver.fabric.VisualDriver"]
+  },
+
+  "mixins": [
+    "visual-driver.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.16.7",
+    "fabric": "*",
+    "minecraft": ">=1.16.1"
+  }
+}

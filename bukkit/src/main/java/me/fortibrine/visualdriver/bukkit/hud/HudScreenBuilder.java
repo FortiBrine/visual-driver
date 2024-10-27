@@ -7,7 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
-import me.fortibrine.visualdriver.api.JNetBuffer;
+import me.fortibrine.visualdriver.bukkit.api.JNetBuffer;
 import org.bukkit.entity.Player;
 
 @NoArgsConstructor

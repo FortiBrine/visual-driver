@@ -1,4 +1,0 @@
-{
-  "command.sendpayload.usage": "/sendpayload [channel]",
-  "command.sendpayload.success": "Packet was sent"
-}

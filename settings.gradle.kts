@@ -1,11 +1,11 @@
 pluginManagement {
     repositories {
         mavenCentral()
-        maven("https://maven.minecraftforge.net/")
+        maven("https://maven.fabricmc.net/")
     }
 }
 
 rootProject.name = "visual-driver"
-include("forge")
 include("bukkit")
+include("fabric")
 include("common")
