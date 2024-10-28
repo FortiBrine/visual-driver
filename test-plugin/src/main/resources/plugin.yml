@@ -1,0 +1,5 @@
+name: "VisualDriverTest"
+version: 1.0
+main: me.fortibrine.visualdriver.testplugin.TestPlugin
+
+depends: [VisualDriver]

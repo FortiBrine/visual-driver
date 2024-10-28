@@ -9,3 +9,4 @@ rootProject.name = "visual-driver"
 include("bukkit")
 include("fabric")
 include("common")
+include("test-plugin")

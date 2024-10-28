@@ -1,4 +1,4 @@
-package me.fortibrine.visualdriver.fabric.api;
+package me.fortibrine.visualdriver.api;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;

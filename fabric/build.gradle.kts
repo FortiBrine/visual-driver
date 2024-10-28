@@ -8,10 +8,6 @@ dependencies {
 
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
-
-//    implementation(project(":common"))
-
-//    include(project(":common"))
 }
 
 tasks {
