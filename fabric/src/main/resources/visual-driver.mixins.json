@@ -4,12 +4,11 @@
   "package": "me.fortibrine.visualdriver.fabric.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-
   ],
   "client": [
-    "TitleScreenMixin",
     "ConnectionMixin",
-    "KeyboardHandlerMixin"
+    "KeyboardHandlerMixin",
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
