@@ -5,10 +5,11 @@ import lombok.Getter;
 import me.fortibrine.visualdriver.fabric.event.TitleScreenRenderCallback;
 import me.fortibrine.visualdriver.fabric.hud.HudManager;
 import me.fortibrine.visualdriver.fabric.listener.KeyListener;
-import me.fortibrine.visualdriver.fabric.listener.PacketListener;
+import me.fortibrine.visualdriver.fabric.listener.HudPacketListener;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.world.phys.Vec3;
 
 @Getter
@@ -19,21 +20,26 @@ public class VisualDriver implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+            Minecraft mc = Minecraft.getInstance();
+            Font font = mc.font;
+
             PoseStack pose = context.matrixStack();
             pose.pushPose();
             Vec3 camera = context.camera().getPosition();
             pose.translate(-camera.x, -camera.y, -camera.z);
             pose.translate(100, 100, 100);
+            pose.mulPose(context.camera().rotation());
+            pose.scale(-0.025F, -0.025F, 0.025F);
             String text = "hello, world";
-            Minecraft.getInstance().font.drawInBatch(
+            font.drawInBatch(
                     text,
-                    (float)(-Minecraft.getInstance().font.width(text) / 2),
+                    -font.width(text) / 2f,
                     0,
                     0xFF000000,
-                    true,
+                    false,
                     pose.last().pose(),
                     context.consumers(),
-                    true,
+                    false,
                     0xFFFFFFFF,
                     0
             );
@@ -51,7 +57,7 @@ public class VisualDriver implements ClientModInitializer {
         });
 
 
-        new PacketListener(this);
+        new HudPacketListener(this);
         new KeyListener();
 
     }

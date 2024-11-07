@@ -10,11 +10,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public class PacketListener implements CustomPayloadCallback {
+public class HudPacketListener implements CustomPayloadCallback {
 
     private final VisualDriver mod;
 
-    public PacketListener(VisualDriver mod) {
+    public HudPacketListener(VisualDriver mod) {
         this.mod = mod;
         CustomPayloadCallback.EVENT.register(this);
     }
