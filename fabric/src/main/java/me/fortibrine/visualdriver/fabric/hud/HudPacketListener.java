@@ -1,4 +1,4 @@
-package me.fortibrine.visualdriver.fabric.listener;
+package me.fortibrine.visualdriver.fabric.hud;
 
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import me.fortibrine.visualdriver.api.JNetBuffer;
