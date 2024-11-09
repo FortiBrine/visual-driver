@@ -1,4 +1,4 @@
-package me.fortibrine.visualdriver.fabric.world;
+package me.fortibrine.visualdriver.fabric.world.text;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.fortibrine.visualdriver.api.JNetBuffer;
@@ -10,24 +10,21 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public class WorldPacketListener implements CustomPayloadCallback {
+public class TextPacketListener implements CustomPayloadCallback {
 
     private final VisualDriver mod;
 
-    public WorldPacketListener(VisualDriver mod) {
+    public TextPacketListener(VisualDriver mod) {
         this.mod = mod;
         CustomPayloadCallback.EVENT.register(this);
     }
 
     @Override
-    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf, CallbackInfo info) {
+    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
         Minecraft mc = Minecraft.getInstance();
         Font font = mc.font;
         LocalPlayer player = mc.player;
-
-        if (player == null) return;
 
         String channel = identifier.toString();
 

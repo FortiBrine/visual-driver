@@ -2,6 +2,7 @@ package me.fortibrine.visualdriver.fabric.mixin;
 
 import io.netty.channel.ChannelHandlerContext;
 import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
@@ -20,6 +21,8 @@ public class ConnectionMixin {
     @Inject(method = "channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"))
     public void channelRead0(ChannelHandlerContext context, Packet<?> packet, CallbackInfo info) throws IOException {
 
+        Minecraft mc = Minecraft.getInstance();
+
         if (!(packet instanceof ClientboundCustomPayloadPacket)) return;
 
         ClientboundCustomPayloadPacket customPayloadPacket = (ClientboundCustomPayloadPacket) packet;
@@ -27,7 +30,7 @@ public class ConnectionMixin {
         ResourceLocation identifier = customPayloadPacket.getIdentifier();
         FriendlyByteBuf data = customPayloadPacket.getData();
 
-        CustomPayloadCallback.EVENT.invoker().payload(identifier, data, info);
+        CustomPayloadCallback.EVENT.invoker().payload(identifier, data);
     }
 
 }

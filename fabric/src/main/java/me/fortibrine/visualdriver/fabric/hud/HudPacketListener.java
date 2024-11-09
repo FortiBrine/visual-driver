@@ -8,7 +8,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class HudPacketListener implements CustomPayloadCallback {
 
@@ -20,10 +19,9 @@ public class HudPacketListener implements CustomPayloadCallback {
     }
 
     @Override
-    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf, CallbackInfo info) {
-        LocalPlayer player = Minecraft.getInstance().player;
-
-        if (player == null) return;
+    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
 
         String channel = identifier.toString();
 
@@ -43,7 +41,7 @@ public class HudPacketListener implements CustomPayloadCallback {
                 int color = ldoinBuffer.readVarInt();
 
                 mod.getHudManager().getActions().add((stack, delta) -> {
-                    Minecraft.getInstance().font.drawShadow(
+                    mc.font.drawShadow(
                             stack,
                             text,
                             x, y,
