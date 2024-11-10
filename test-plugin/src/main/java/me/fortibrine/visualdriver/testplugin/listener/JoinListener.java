@@ -1,6 +1,7 @@
 package me.fortibrine.visualdriver.testplugin.listener;
 
 import lombok.AllArgsConstructor;
+import me.fortibrine.visualdriver.bukkit.hud.DisableRender;
 import me.fortibrine.visualdriver.bukkit.hud.HudScreenBuilder;
 import me.fortibrine.visualdriver.bukkit.world.WorldContext;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public class JoinListener implements Listener {
                     new HudScreenBuilder()
                             .rectangle(0, 0, 80, 40, 0xFFFFFFFF)
                             .text("HUD RENDER TEXT", 10, 10, 0xFF000000)
+                            .disable(DisableRender.RENDER_EXPERIENCE_BAR)
                             .apply(player);
                     new WorldContext()
                             .text(player, "hello, world", 100, 100, 100, 0xFFFFFFFF, 0);

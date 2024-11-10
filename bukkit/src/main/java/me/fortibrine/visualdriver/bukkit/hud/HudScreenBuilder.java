@@ -35,6 +35,15 @@ public class HudScreenBuilder {
         return this;
     }
 
+    public HudScreenBuilder disable(DisableRender... renders) {
+        for (DisableRender render : renders) {
+            ldoinBuffer.writeString("disable");
+            ldoinBuffer.writeString(render.getName());
+        }
+
+        return this;
+    }
+
     public void apply(Player player) {
 
         ldoinBuffer.writeString("end");

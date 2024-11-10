@@ -32,6 +32,7 @@ public class HudPacketListener implements CustomPayloadCallback {
         String drawMode = ldoinBuffer.readString();
 
         mod.getHudManager().getActions().clear();
+        mod.getHudManager().getDisableRender().clear();
 
         while (!drawMode.equals("end")) {
             if (drawMode.equals("text")) {
@@ -58,6 +59,8 @@ public class HudPacketListener implements CustomPayloadCallback {
                 mod.getHudManager().getActions().add((stack, delta) -> {
                     Gui.fill(stack, x1, y1, x2, y2, color);
                 });
+            } else if (drawMode.equals("disable")) {
+                mod.getHudManager().getDisableRender().add(ldoinBuffer.readString());
             }
 
             drawMode = ldoinBuffer.readString();

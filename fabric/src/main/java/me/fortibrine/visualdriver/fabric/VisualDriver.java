@@ -22,6 +22,7 @@ public class VisualDriver implements ClientModInitializer {
     public void onInitializeClient() {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             hudManager.getActions().clear();
+            hudManager.getDisableRender().clear();
             worldManager.getActions().clear();
         });
 
