@@ -8,7 +8,8 @@
   "client": [
     "ConnectionMixin",
     "GuiMixin",
-    "KeyboardHandlerMixin"
+    "KeyboardHandlerMixin",
+    "ScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -7,15 +7,15 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import io.netty.buffer.ByteBuf;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.bukkit.VisualDriverPlugin;
 import me.fortibrine.visualdriver.bukkit.key.event.KeyPressEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class KeyListener extends PacketAdapter {
 
-    public KeyListener(VisualDriverPlugin plugin) {
+    public KeyListener(Plugin plugin) {
         super(plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CUSTOM_PAYLOAD);
     }
 

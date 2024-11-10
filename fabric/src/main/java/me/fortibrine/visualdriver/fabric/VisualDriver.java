@@ -1,6 +1,7 @@
 package me.fortibrine.visualdriver.fabric;
 
 import lombok.Getter;
+import me.fortibrine.visualdriver.fabric.gui.GuiPacketListener;
 import me.fortibrine.visualdriver.fabric.hud.HudManager;
 import me.fortibrine.visualdriver.fabric.listener.KeyListener;
 import me.fortibrine.visualdriver.fabric.hud.HudPacketListener;
@@ -42,6 +43,7 @@ public class VisualDriver implements ClientModInitializer {
 
         new HudPacketListener(this);
         new TextPacketListener(this);
+        new GuiPacketListener(this);
         new KeyListener();
 
     }
