@@ -8,6 +8,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
+import me.fortibrine.visualdriver.bukkit.gui.widget.TextBox;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -43,6 +44,17 @@ public class GuiBuilder {
         ldoinBuffer.writeVarInt(height);
         ldoinBuffer.writeString(text);
         widgets.add(new Button(x, y, width, height, text, onPress));
+        return this;
+    }
+
+    public GuiBuilder textBox(int x, int y, int width, int height, String text) {
+        ldoinBuffer.writeString("textbox");
+        ldoinBuffer.writeVarInt(x);
+        ldoinBuffer.writeVarInt(y);
+        ldoinBuffer.writeVarInt(width);
+        ldoinBuffer.writeVarInt(height);
+        ldoinBuffer.writeString(text);
+        widgets.add(new TextBox(x, y, width, height, text));
         return this;
     }
 

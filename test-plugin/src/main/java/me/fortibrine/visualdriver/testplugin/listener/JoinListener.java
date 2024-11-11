@@ -33,6 +33,7 @@ public class JoinListener implements Listener {
                             .button(50, 50, 120, 20, "click", player1 -> {
                                 player1.sendMessage("click");
                             })
+                            .textBox(50, 80, 120, 20, "text")
                             .open(player);
                 },
                 20L

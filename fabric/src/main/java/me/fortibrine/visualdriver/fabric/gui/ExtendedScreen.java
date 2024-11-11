@@ -24,7 +24,6 @@ public class ExtendedScreen extends Screen {
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
         this.renderBackground(poseStack);
-
         super.render(poseStack, mouseX, mouseY, delta);
     }
 }

@@ -7,6 +7,7 @@ import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
 import me.fortibrine.visualdriver.fabric.mixin.ScreenAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -72,7 +73,26 @@ public class GuiPacketListener implements CustomPayloadCallback {
                             }
                         })
                 ));
+            } else if (drawMode.equals("textbox")) {
+
+                int x = ldoinBuffer.readVarInt();
+                int y = ldoinBuffer.readVarInt();
+                int width = ldoinBuffer.readVarInt();
+                int height = ldoinBuffer.readVarInt();
+                String text = ldoinBuffer.readString();
+
+                actions.add(screen -> ((ScreenAccessor) screen).addButton(
+                        new EditBox(
+                                mc.font,
+                                x,
+                                y,
+                                width,
+                                height,
+                                new TextComponent(text)
+                        )
+                ));
             }
+
             index++;
 
             drawMode = ldoinBuffer.readString();
