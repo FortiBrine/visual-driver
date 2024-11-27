@@ -25,6 +25,7 @@ public class JoinListener implements Listener {
                             .rectangle(0, 0, 80, 40, 0xFFFFFFFF)
                             .text("HUD RENDER TEXT", 10, 10, 0xFF000000)
                             .disable(DisableRender.RENDER_EXPERIENCE_BAR)
+                            .item("minecraft:apple", 50, 50)
                             .apply(player);
                     new WorldContext()
                             .text(player, "hello, world", 100, 100, 100, 0xFFFFFFFF, 0);

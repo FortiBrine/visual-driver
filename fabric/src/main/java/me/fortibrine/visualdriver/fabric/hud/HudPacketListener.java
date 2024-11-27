@@ -1,13 +1,17 @@
 package me.fortibrine.visualdriver.fabric.hud;
 
+import lombok.SneakyThrows;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class HudPacketListener implements CustomPayloadCallback {
 
@@ -18,6 +22,7 @@ public class HudPacketListener implements CustomPayloadCallback {
         CustomPayloadCallback.EVENT.register(this);
     }
 
+    @SneakyThrows
     @Override
     public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
         Minecraft mc = Minecraft.getInstance();
@@ -61,6 +66,15 @@ public class HudPacketListener implements CustomPayloadCallback {
                 });
             } else if (drawMode.equals("disable")) {
                 mod.getHudManager().getDisableRender().add(ldoinBuffer.readString());
+            } else if (drawMode.equals("item")) {
+                String key = ldoinBuffer.readString();
+                int x = ldoinBuffer.readVarInt();
+                int y = ldoinBuffer.readVarInt();
+
+                Item item = Registry.ITEM.get(new ResourceLocation(key));
+                mod.getHudManager().getActions().add((stack, delta) -> {
+                    mc.getItemRenderer().renderGuiItem(new ItemStack(item), x, y);
+                });
             }
 
             drawMode = ldoinBuffer.readString();

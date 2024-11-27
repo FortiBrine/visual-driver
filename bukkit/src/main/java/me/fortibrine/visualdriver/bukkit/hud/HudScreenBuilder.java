@@ -8,6 +8,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
 import me.fortibrine.visualdriver.api.JNetBuffer;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 @NoArgsConstructor
@@ -41,6 +42,14 @@ public class HudScreenBuilder {
             ldoinBuffer.writeString(render.getName());
         }
 
+        return this;
+    }
+
+    public HudScreenBuilder item(String key, int x, int y) {
+        ldoinBuffer.writeString("item");
+        ldoinBuffer.writeString(key);
+        ldoinBuffer.writeVarInt(x);
+        ldoinBuffer.writeVarInt(y);
         return this;
     }
 
