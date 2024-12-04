@@ -3,34 +3,29 @@ package me.fortibrine.visualdriver.fabric.world.text;
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
-public class TextPacketListener implements CustomPayloadCallback {
+public class TextPacketListener implements ClientPlayNetworking.PlayChannelHandler {
 
     private final VisualDriver mod;
 
     public TextPacketListener(VisualDriver mod) {
         this.mod = mod;
-        CustomPayloadCallback.EVENT.register(this);
+        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver", "text"), this);
     }
 
     @Override
-    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
-        Minecraft mc = Minecraft.getInstance();
+    public void receive(Minecraft mc, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         Font font = mc.font;
-        LocalPlayer player = mc.player;
 
-        String channel = identifier.toString();
-
-        if (!channel.equals("visualdriver:text")) return;
-
-        JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
+        JNetBuffer ldoinBuffer = new JNetBuffer(buf);
 
         String id = ldoinBuffer.readString();
         int x = ldoinBuffer.readVarInt();
@@ -74,7 +69,6 @@ public class TextPacketListener implements CustomPayloadCallback {
                     pose.popPose();
                 }
         );
-
     }
 
 }

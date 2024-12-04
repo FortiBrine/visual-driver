@@ -1,38 +1,31 @@
 package me.fortibrine.visualdriver.fabric.hud;
 
-import lombok.SneakyThrows;
-import me.fortibrine.visualdriver.fabric.VisualDriver;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
+import me.fortibrine.visualdriver.fabric.VisualDriver;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class HudPacketListener implements CustomPayloadCallback {
+public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandler {
 
     private final VisualDriver mod;
 
     public HudPacketListener(VisualDriver mod) {
         this.mod = mod;
-        CustomPayloadCallback.EVENT.register(this);
+        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver", "hud"), this);
     }
 
-    @SneakyThrows
     @Override
-    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
+    public void receive(Minecraft mc, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
 
-        String channel = identifier.toString();
-
-        if (!channel.equals("visualdriver:hud")) return;
-
-        JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
+        JNetBuffer ldoinBuffer = new JNetBuffer(buf);
 
         String drawMode = ldoinBuffer.readString();
 
@@ -79,6 +72,5 @@ public class HudPacketListener implements CustomPayloadCallback {
 
             drawMode = ldoinBuffer.readString();
         }
-
     }
 }

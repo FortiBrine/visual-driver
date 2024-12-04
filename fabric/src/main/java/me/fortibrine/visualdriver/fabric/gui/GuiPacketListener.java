@@ -3,41 +3,34 @@ package me.fortibrine.visualdriver.fabric.gui;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import me.fortibrine.visualdriver.fabric.event.CustomPayloadCallback;
 import me.fortibrine.visualdriver.fabric.mixin.ScreenAccessor;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GuiPacketListener implements CustomPayloadCallback {
+public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandler {
 
     private final VisualDriver mod;
 
     public GuiPacketListener(VisualDriver mod) {
         this.mod = mod;
-        CustomPayloadCallback.EVENT.register(this);
+        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver:gui"), this);
     }
 
     @Override
-    public void payload(ResourceLocation identifier, FriendlyByteBuf byteBuf) {
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-
-        String channel = identifier.toString();
-
-        if (!channel.equals("visualdriver:gui")) return;
-
-        JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
+    public void receive(Minecraft mc, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
+        JNetBuffer ldoinBuffer = new JNetBuffer(buf);
 
         String menuId = ldoinBuffer.readString();
         String drawMode = ldoinBuffer.readString();
@@ -63,14 +56,10 @@ public class GuiPacketListener implements CustomPayloadCallback {
                             ldoinClickBuffer.writeString(menuId);
                             ldoinClickBuffer.writeVarInt(finalIndex);
 
-                            if (mc.getConnection() != null) {
-                                mc.getConnection().send(
-                                        new ServerboundCustomPayloadPacket(
-                                                new ResourceLocation("visualdriver", "gui"),
-                                                new FriendlyByteBuf(ldoinClickBuffer.getBuf())
-                                        )
-                                );
-                            }
+                            ClientPlayNetworking.send(
+                                    new ResourceLocation("visualdriver", "gui"),
+                                    new FriendlyByteBuf(ldoinClickBuffer.getBuf())
+                            );
                         })
                 ));
             } else if (drawMode.equals("textbox")) {
@@ -106,4 +95,5 @@ public class GuiPacketListener implements CustomPayloadCallback {
 
         mc.setScreen(screen);
     }
+
 }
