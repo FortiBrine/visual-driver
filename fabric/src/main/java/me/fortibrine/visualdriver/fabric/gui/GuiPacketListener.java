@@ -25,7 +25,7 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandle
 
     public GuiPacketListener(VisualDriver mod) {
         this.mod = mod;
-        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver:gui"), this);
+        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver", "gui"), this);
     }
 
     @Override

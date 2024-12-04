@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.event.KeyPressCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -24,10 +24,12 @@ public class KeyListener implements KeyPressCallback {
         ldoinBuffer.writeVarInt(arg0);
         ldoinBuffer.writeVarInt(modifiers);
 
-        if (Minecraft.getInstance().getConnection() == null) return;
+        if (Minecraft.getInstance().getCurrentServer() != null) {
+            ClientPlayNetworking.send(
+                    new ResourceLocation("visualdriver", "key"),
+                    new FriendlyByteBuf(ldoinBuffer.getBuf())
+            );
+        }
 
-        Minecraft.getInstance().getConnection().send(
-                new ServerboundCustomPayloadPacket(new ResourceLocation("visualdriver", "key"), new FriendlyByteBuf(ldoinBuffer.getBuf()))
-        );
     }
 }
