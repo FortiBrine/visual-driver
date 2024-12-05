@@ -11,6 +11,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Gui.class)
 public class GuiMixin {
 
+    @Inject(method = "render", at = @At("TAIL"))
+    public void render(PoseStack poseStack, float delta, CallbackInfo ci) {
+        Gui context = (Gui) (Object) this;
+        HudRenderEvents.RENDER_HUD.invoker().render(context, poseStack, delta);
+    }
+
     @Inject(method = "renderPlayerHealth", at = @At("HEAD"), cancellable = true)
     public void renderPlayerHealth(PoseStack poseStack, CallbackInfo info) {
         if (!HudRenderEvents.RENDER_HEALTH.invoker().renderHealth(poseStack)) {

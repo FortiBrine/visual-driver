@@ -3,20 +3,20 @@ package me.fortibrine.visualdriver.fabric.hud;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import me.fortibrine.visualdriver.fabric.event.HudRenderEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.gui.Gui;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 @Getter
-public class HudManager implements HudRenderCallback {
+public class HudManager implements HudRenderEvents.RenderHud {
 
-    private final List<BiConsumer<PoseStack, Float>> actions = new ArrayList<>();
+    private final List<TriConsumer<Gui, PoseStack, Float>> actions = new ArrayList<>();
     private final List<String> disableRender = new ArrayList<>();
 
     public HudManager() {
-        HudRenderCallback.EVENT.register(this);
+        HudRenderEvents.RENDER_HUD.register(this);
 
         HudRenderEvents.RENDER_VEHICLE_HEALTH.register(stack -> !disableRender.contains("render_vehicle_health"));
         HudRenderEvents.RENDER_HOTBAR.register((f, stack) -> !disableRender.contains("render_hotbar"));
@@ -29,7 +29,8 @@ public class HudManager implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(PoseStack stack, float delta) {
-        new ArrayList<>(actions).forEach(action -> action.accept(stack, delta));
+    public void render(Gui context, PoseStack stack, float delta) {
+        new ArrayList<>(actions).forEach(action -> action.accept(context, stack, delta));
     }
+
 }

@@ -26,6 +26,7 @@ public class JoinListener implements Listener {
                             .text("HUD RENDER TEXT", 10, 10, 0xFF000000)
                             .disable(DisableRender.RENDER_EXPERIENCE_BAR)
                             .item("minecraft:apple", 50, 50)
+                            .image("https://docs.fabricmc.net/assets/develop/rendering/draw-context-recipe-book-background.png", 30, 30, 0, 0, 256, 256)
                             .apply(player);
                     new WorldContext()
                             .text(player, "hello, world", 100, 100, 100, 0xFFFFFFFF, 0);

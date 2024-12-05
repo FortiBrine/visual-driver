@@ -39,7 +39,7 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
                 int y = ldoinBuffer.readVarInt();
                 int color = ldoinBuffer.readVarInt();
 
-                mod.getHudManager().getActions().add((stack, delta) -> {
+                mod.getHudManager().getActions().add((context, stack, delta) -> {
                     mc.font.drawShadow(
                             stack,
                             text,
@@ -54,7 +54,7 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
                 int y2 = ldoinBuffer.readVarInt();
                 int color = ldoinBuffer.readVarInt();
 
-                mod.getHudManager().getActions().add((stack, delta) -> {
+                mod.getHudManager().getActions().add((context, stack, delta) -> {
                     Gui.fill(stack, x1, y1, x2, y2, color);
                 });
             } else if (drawMode.equals("disable")) {
@@ -65,8 +65,24 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
                 int y = ldoinBuffer.readVarInt();
 
                 Item item = Registry.ITEM.get(new ResourceLocation(key));
-                mod.getHudManager().getActions().add((stack, delta) -> {
+                mod.getHudManager().getActions().add((context, stack, delta) -> {
                     mc.getItemRenderer().renderGuiItem(new ItemStack(item), x, y);
+                });
+            } else if (drawMode.equals("image")) {
+                String url = ldoinBuffer.readString();
+                int x = ldoinBuffer.readVarInt();
+                int y = ldoinBuffer.readVarInt();
+                int offsetX = ldoinBuffer.readVarInt();
+                int offsetY = ldoinBuffer.readVarInt();
+                int width = ldoinBuffer.readVarInt();
+                int height = ldoinBuffer.readVarInt();
+
+                mod.getHudManager().getActions().add((context, stack, delta) -> {
+
+                    ResourceLocation location = mod.getImageLoader().load(url);
+
+                    mc.getTextureManager().bind(location);
+                    context.blit(stack, x, y, offsetX, offsetY, width, height);
                 });
             }
 

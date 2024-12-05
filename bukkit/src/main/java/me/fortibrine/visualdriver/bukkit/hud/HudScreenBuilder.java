@@ -36,6 +36,18 @@ public class HudScreenBuilder {
         return this;
     }
 
+    public HudScreenBuilder image(String url, int x, int y, int offsetX, int offsetY, int width, int height) {
+        ldoinBuffer.writeString("image");
+        ldoinBuffer.writeString(url);
+        ldoinBuffer.writeVarInt(x);
+        ldoinBuffer.writeVarInt(y);
+        ldoinBuffer.writeVarInt(offsetX);
+        ldoinBuffer.writeVarInt(offsetY);
+        ldoinBuffer.writeVarInt(width);
+        ldoinBuffer.writeVarInt(height);
+        return this;
+    }
+
     public HudScreenBuilder disable(DisableRender... renders) {
         for (DisableRender render : renders) {
             ldoinBuffer.writeString("disable");

@@ -3,8 +3,18 @@ package me.fortibrine.visualdriver.fabric.event;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.client.gui.Gui;
 
 public interface HudRenderEvents {
+
+    Event<RenderHud> RENDER_HUD = EventFactory.createArrayBacked(
+            RenderHud.class,
+            (listeners) -> (context, stack, delta) -> {
+                for (RenderHud listener : listeners) {
+                    listener.render(context, stack, delta);
+                }
+            }
+    );
 
     Event<RenderHealth> RENDER_HEALTH = EventFactory.createArrayBacked(
             RenderHealth.class,
@@ -101,6 +111,10 @@ public interface HudRenderEvents {
                 return true;
             }
     );
+
+    public static interface RenderHud {
+        void render(Gui context, PoseStack poseStack, float tickDelta);
+    }
 
     public static interface RenderHealth {
         boolean renderHealth(PoseStack stack);
