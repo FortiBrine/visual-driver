@@ -35,8 +35,6 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
         while (ldoinBuffer.getBuf().isReadable()) {
             String drawMode = ldoinBuffer.readString();
 
-            mod.getLogger().info(drawMode);
-
             mod.getHudManager().getActions().addAll(Arrays.asList(
                     new TextDrawable(drawMode, ldoinBuffer),
                     new RectangleDrawable(drawMode, ldoinBuffer),

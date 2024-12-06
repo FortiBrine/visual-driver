@@ -34,8 +34,6 @@ public class TextDrawable implements DrawConsumer {
         this.x = buffer.readVarInt();
         this.y = buffer.readVarInt();
         this.color = buffer.readVarInt();
-
-        logger.info("text ({} {} {} {})", text, x, y, color);
     }
 
     @Override
