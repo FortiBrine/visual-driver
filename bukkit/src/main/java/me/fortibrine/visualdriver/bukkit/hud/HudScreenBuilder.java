@@ -66,9 +66,6 @@ public class HudScreenBuilder {
     }
 
     public void apply(Player player) {
-
-        ldoinBuffer.writeString("end");
-
         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
 
         packet.getStrings().write(0, "visualdriver:hud");

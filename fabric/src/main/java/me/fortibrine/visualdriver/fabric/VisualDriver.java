@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 @Getter
 public class VisualDriver implements ClientModInitializer {
 
-    private final HudManager hudManager = new HudManager();
+    private final HudManager hudManager = new HudManager(this);
     private final WorldManager worldManager = new WorldManager();
     private final ImageLoader imageLoader = new ImageLoader();
 

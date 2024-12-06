@@ -2,16 +2,18 @@ package me.fortibrine.visualdriver.fabric.hud;
 
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
+import me.fortibrine.visualdriver.fabric.drawable.ImageDrawable;
+import me.fortibrine.visualdriver.fabric.drawable.ItemDrawable;
+import me.fortibrine.visualdriver.fabric.drawable.RectangleDrawable;
+import me.fortibrine.visualdriver.fabric.drawable.TextDrawable;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+
+import java.util.Arrays;
 
 public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandler {
 
@@ -27,66 +29,24 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
 
         JNetBuffer ldoinBuffer = new JNetBuffer(buf);
 
-        String drawMode = ldoinBuffer.readString();
-
         mod.getHudManager().getActions().clear();
         mod.getHudManager().getDisableRender().clear();
 
-        while (!drawMode.equals("end")) {
-            if (drawMode.equals("text")) {
-                String text = ldoinBuffer.readString();
-                int x = ldoinBuffer.readVarInt();
-                int y = ldoinBuffer.readVarInt();
-                int color = ldoinBuffer.readVarInt();
+        while (ldoinBuffer.getBuf().isReadable()) {
+            String drawMode = ldoinBuffer.readString();
 
-                mod.getHudManager().getActions().add((context, stack, delta) -> {
-                    mc.font.drawShadow(
-                            stack,
-                            text,
-                            x, y,
-                            color
-                    );
-                });
-            } else if (drawMode.equals("rectangle")) {
-                int x1 = ldoinBuffer.readVarInt();
-                int y1 = ldoinBuffer.readVarInt();
-                int x2 = ldoinBuffer.readVarInt();
-                int y2 = ldoinBuffer.readVarInt();
-                int color = ldoinBuffer.readVarInt();
+            mod.getLogger().info(drawMode);
 
-                mod.getHudManager().getActions().add((context, stack, delta) -> {
-                    Gui.fill(stack, x1, y1, x2, y2, color);
-                });
-            } else if (drawMode.equals("disable")) {
+            mod.getHudManager().getActions().addAll(Arrays.asList(
+                    new TextDrawable(drawMode, ldoinBuffer),
+                    new RectangleDrawable(drawMode, ldoinBuffer),
+                    new ImageDrawable(drawMode, ldoinBuffer),
+                    new ItemDrawable(drawMode, ldoinBuffer)
+            ));
+
+            if (drawMode.equals("disable")) {
                 mod.getHudManager().getDisableRender().add(ldoinBuffer.readString());
-            } else if (drawMode.equals("item")) {
-                String key = ldoinBuffer.readString();
-                int x = ldoinBuffer.readVarInt();
-                int y = ldoinBuffer.readVarInt();
-
-                Item item = Registry.ITEM.get(new ResourceLocation(key));
-                mod.getHudManager().getActions().add((context, stack, delta) -> {
-                    mc.getItemRenderer().renderGuiItem(new ItemStack(item), x, y);
-                });
-            } else if (drawMode.equals("image")) {
-                String url = ldoinBuffer.readString();
-                int x = ldoinBuffer.readVarInt();
-                int y = ldoinBuffer.readVarInt();
-                int offsetX = ldoinBuffer.readVarInt();
-                int offsetY = ldoinBuffer.readVarInt();
-                int width = ldoinBuffer.readVarInt();
-                int height = ldoinBuffer.readVarInt();
-
-                mod.getHudManager().getActions().add((context, stack, delta) -> {
-
-                    ResourceLocation location = mod.getImageLoader().load(url);
-
-                    mc.getTextureManager().bind(location);
-                    context.blit(stack, x, y, offsetX, offsetY, width, height);
-                });
             }
-
-            drawMode = ldoinBuffer.readString();
         }
     }
 }
