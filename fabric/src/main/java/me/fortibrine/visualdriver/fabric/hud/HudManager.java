@@ -5,13 +5,14 @@ import lombok.Getter;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import me.fortibrine.visualdriver.fabric.drawable.DrawConsumer;
 import me.fortibrine.visualdriver.fabric.event.HudRenderEvents;
-import net.minecraft.client.gui.Gui;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class HudManager implements HudRenderEvents.RenderHud {
+public class HudManager implements HudRenderCallback {
 
     private final List<DrawConsumer> actions = new ArrayList<>();
     private final List<String> disableRender = new ArrayList<>();
@@ -20,7 +21,7 @@ public class HudManager implements HudRenderEvents.RenderHud {
 
     public HudManager(VisualDriver mod) {
         this.mod = mod;
-        HudRenderEvents.RENDER_HUD.register(this);
+        HudRenderCallback.EVENT.register(this);
 
         HudRenderEvents.RENDER_VEHICLE_HEALTH.register(stack -> !disableRender.contains("render_vehicle_health"));
         HudRenderEvents.RENDER_HOTBAR.register((f, stack) -> !disableRender.contains("render_hotbar"));
@@ -32,9 +33,10 @@ public class HudManager implements HudRenderEvents.RenderHud {
         HudRenderEvents.RENDER_JUMP_METER.register((stack, i) -> !disableRender.contains("render_jump_meter"));
     }
 
+
     @Override
-    public void render(Gui context, PoseStack stack, float delta) {
-        new ArrayList<>(actions).forEach(action -> action.draw(mod, context, stack, delta));
+    public void onHudRender(PoseStack matrixStack, float tickDelta) {
+        new ArrayList<>(actions).forEach(action -> action.draw(mod, Minecraft.getInstance().gui, matrixStack, tickDelta));
     }
 
 }

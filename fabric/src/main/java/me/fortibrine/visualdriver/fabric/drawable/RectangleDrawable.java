@@ -6,9 +6,13 @@ import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Getter
 public class RectangleDrawable implements DrawConsumer {
+
+    private final Logger logger = LogManager.getLogger();
 
     private final String drawMode;
     private int x1;
@@ -32,11 +36,13 @@ public class RectangleDrawable implements DrawConsumer {
         this.x2 = buffer.readVarInt();
         this.y2 = buffer.readVarInt();
         this.color = buffer.readVarInt();
+
+        logger.info("rectangle ({} {} {} {} {})", x1, x2, y1, y2, color);
     }
 
     @Override
     public void draw(VisualDriver mod, GuiComponent gui, PoseStack stack, float delta) {
-        if (drawMode.equals("text")) {
+        if (drawMode.equals("rectangle")) {
             GuiComponent.fill(stack, x1, y1, x2, y2, color);
         }
     }

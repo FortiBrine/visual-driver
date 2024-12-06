@@ -6,9 +6,13 @@ import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Getter
 public class TextDrawable implements DrawConsumer {
+
+    private final Logger logger = LogManager.getLogger();
 
     private final String drawMode;
     private String text;
@@ -30,6 +34,8 @@ public class TextDrawable implements DrawConsumer {
         this.x = buffer.readVarInt();
         this.y = buffer.readVarInt();
         this.color = buffer.readVarInt();
+
+        logger.info("text ({} {} {} {})", text, x, y, color);
     }
 
     @Override

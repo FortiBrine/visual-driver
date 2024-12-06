@@ -26,7 +26,7 @@ public class ImageDrawable implements DrawConsumer {
 
         this.drawMode = drawMode;
 
-        if (!drawMode.equals("text")) {
+        if (!drawMode.equals("image")) {
             return;
         }
 
