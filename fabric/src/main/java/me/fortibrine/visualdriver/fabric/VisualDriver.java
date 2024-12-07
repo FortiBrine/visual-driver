@@ -30,6 +30,7 @@ public class VisualDriver implements ClientModInitializer {
             hudManager.getActions().clear();
             hudManager.getDisableRender().clear();
             worldManager.getActions().clear();
+            imageLoader.clear();
         });
 
         ScreenEvents.BEFORE_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
