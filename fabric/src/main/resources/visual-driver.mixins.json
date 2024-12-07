@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "AutoAcceptResourcePackMixin",
     "GuiMixin",
     "KeyboardHandlerMixin",
     "ScreenAccessor"
