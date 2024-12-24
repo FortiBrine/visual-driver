@@ -23,7 +23,7 @@ public class KeyListener extends PacketAdapter {
     public void onPacketReceiving(PacketEvent event) {
         PacketContainer packet = event.getPacket();
 
-        String channel = packet.getStrings().read(0);
+        String channel = packet.getModifier().read(0).toString();
         ByteBuf byteBuf = (ByteBuf) packet.getModifier().read(1);
 
         if (!channel.equals("visualdriver:key")) return;

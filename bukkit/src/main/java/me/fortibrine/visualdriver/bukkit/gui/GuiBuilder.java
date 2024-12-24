@@ -9,6 +9,7 @@ import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
 import me.fortibrine.visualdriver.bukkit.gui.widget.TextBox;
+import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -62,12 +63,7 @@ public class GuiBuilder {
         ldoinBuffer.writeString("end");
         ldoinBuffer.writeString(title == null ? player.getName() : title);
 
-        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
-
-        packet.getStrings().write(0, "visualdriver:gui");
-        packet.getModifier().write(1, MinecraftReflection.getPacketDataSerializer(ldoinBuffer.getBuf()));
-
-        protocolManager.sendServerPacket(player, packet);
+        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:gui", ldoinBuffer.getBuf()));
 
         guiManager.getMenus().put(
                 menuId,

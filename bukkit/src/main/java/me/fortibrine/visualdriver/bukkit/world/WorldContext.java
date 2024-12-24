@@ -1,12 +1,10 @@
 package me.fortibrine.visualdriver.bukkit.world;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
+import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -29,12 +27,7 @@ public class WorldContext {
         ldoinBuffer.writeFloat(offsetX);
         ldoinBuffer.writeFloat(offsetY);
 
-        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
-
-        packet.getStrings().write(0, "visualdriver:text");
-        packet.getModifier().write(1, MinecraftReflection.getPacketDataSerializer(ldoinBuffer.getBuf()));
-
-        protocolManager.sendServerPacket(player, packet);
+        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:text", ldoinBuffer.getBuf()));
         return this;
     }
 

@@ -1,14 +1,12 @@
 package me.fortibrine.visualdriver.bukkit.hud;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import org.bukkit.Material;
+import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 @NoArgsConstructor
@@ -65,13 +63,9 @@ public class HudScreenBuilder {
         return this;
     }
 
+    @SneakyThrows
     public void apply(Player player) {
-        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.CUSTOM_PAYLOAD);
-
-        packet.getStrings().write(0, "visualdriver:hud");
-        packet.getModifier().write(1, MinecraftReflection.getPacketDataSerializer(ldoinBuffer.getBuf()));
-
-        protocolManager.sendServerPacket(player, packet);
+        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:hud", ldoinBuffer.getBuf()));
     }
 
 }
