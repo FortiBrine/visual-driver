@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import io.netty.buffer.ByteBuf;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.key.event.KeyPressEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -39,17 +40,20 @@ public class KeyListener extends PacketAdapter {
                 .collect(Collectors.toList())
                 .get(0);
 
-        Modifier modifier = Arrays.stream(Modifier.values())
+        KeyModifier modifier = Arrays.stream(KeyModifier.values())
                 .filter(type -> type.getModifier() == modifierType)
                 .collect(Collectors.toList())
                 .get(0);
 
-        plugin.getServer().getPluginManager().callEvent(new KeyPressEvent(
-                event.getPlayer(),
-                key,
-                click,
-                modifier
-        ));
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            plugin.getServer().getPluginManager().callEvent(new KeyPressEvent(
+                    event.getPlayer(),
+                    key,
+                    click,
+                    modifier
+            ));
+        });
+
     }
 
 }

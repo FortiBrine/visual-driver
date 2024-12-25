@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Modifier {
+public enum KeyModifier {
     BASIC_CLICK(0),
     SHIFT_CLICK(1),
     CTRL_CLICK(2);
