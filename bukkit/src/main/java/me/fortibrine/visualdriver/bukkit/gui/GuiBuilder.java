@@ -1,15 +1,11 @@
 package me.fortibrine.visualdriver.bukkit.gui;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.utility.MinecraftReflection;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
 import me.fortibrine.visualdriver.bukkit.gui.widget.TextBox;
-import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -20,7 +16,6 @@ import java.util.function.Consumer;
 public class GuiBuilder {
 
     private final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
-    private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
     private String title;
     private final GuiManager guiManager;
     private final List<Object> widgets = new ArrayList<>();
@@ -63,7 +58,12 @@ public class GuiBuilder {
         ldoinBuffer.writeString("end");
         ldoinBuffer.writeString(title == null ? player.getName() : title);
 
-        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:gui", ldoinBuffer.getBuf()));
+        PacketEvents.getAPI()
+                .getPlayerManager()
+                .sendPacket(player, new WrapperPlayServerPluginMessage(
+                        "visualdriver:gui",
+                        ldoinBuffer.getBuf().array()
+                ));
 
         guiManager.getMenus().put(
                 menuId,

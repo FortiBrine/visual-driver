@@ -1,6 +1,6 @@
 dependencies {
     compileOnly(libs.spigot)
-    compileOnly(libs.protocollib)
+    implementation(libs.packetevents)
     implementation(project(":common"))
 }
 

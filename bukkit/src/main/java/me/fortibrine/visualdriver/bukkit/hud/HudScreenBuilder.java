@@ -1,19 +1,17 @@
 package me.fortibrine.visualdriver.bukkit.hud;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 @NoArgsConstructor
 public class HudScreenBuilder {
 
     private final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
-    private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     public HudScreenBuilder text(String text, int x, int y, int color) {
         ldoinBuffer.writeString("text");
@@ -65,7 +63,12 @@ public class HudScreenBuilder {
 
     @SneakyThrows
     public void apply(Player player) {
-        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:hud", ldoinBuffer.getBuf()));
+        PacketEvents.getAPI()
+                .getPlayerManager()
+                .sendPacket(player, new WrapperPlayServerPluginMessage(
+                        "visualdriver:hud",
+                        ldoinBuffer.getBuf().array()
+                ));
     }
 
 }

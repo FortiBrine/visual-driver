@@ -1,6 +1,6 @@
 [versions]
 spigot = "1.12.2-R0.1-SNAPSHOT"
-protocollib = "5.1.0"
+packetevents = "2.8.0"
 netty = "4.1.9.Final"
 lombok = "1.18.30"
 minecraft = "1.16.5"
@@ -10,12 +10,12 @@ loom = "1.0-SNAPSHOT"
 
 [libraries]
 spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
-protocollib = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib" }
 netty = { module = "io.netty:netty-all", version.ref = "netty" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+packetevents = { module = "com.github.retrooper:packetevents-spigot", version.ref = "packetevents" }
 
 [plugins]
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }

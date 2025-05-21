@@ -1,31 +1,23 @@
 package me.fortibrine.visualdriver.bukkit.key;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
+import com.github.retrooper.packetevents.event.PacketListener;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import io.netty.buffer.ByteBuf;
 import me.fortibrine.visualdriver.api.JNetBuffer;
+import me.fortibrine.visualdriver.bukkit.VisualDriverPlugin;
 import me.fortibrine.visualdriver.bukkit.key.event.KeyPressEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class KeyListener extends PacketAdapter {
-
-    public KeyListener(Plugin plugin) {
-        super(plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CUSTOM_PAYLOAD);
-    }
+public class KeyListener implements PacketListener {
 
     @Override
-    public void onPacketReceiving(PacketEvent event) {
-        PacketContainer packet = event.getPacket();
+    public void onPacketReceive(PacketReceiveEvent event) {
 
-        String channel = packet.getModifier().read(0).toString();
-        ByteBuf byteBuf = (ByteBuf) packet.getModifier().read(1);
+        String channel = event.getChannel().toString();
+        ByteBuf byteBuf = (ByteBuf) event.getByteBuf();
 
         if (!channel.equals("visualdriver:key")) return;
 
@@ -45,8 +37,8 @@ public class KeyListener extends PacketAdapter {
                 .collect(Collectors.toList())
                 .get(0);
 
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
-            plugin.getServer().getPluginManager().callEvent(new KeyPressEvent(
+        Bukkit.getScheduler().runTask(VisualDriverPlugin.getInstance(), () -> {
+           Bukkit.getPluginManager().callEvent(new KeyPressEvent(
                     event.getPlayer(),
                     key,
                     click,

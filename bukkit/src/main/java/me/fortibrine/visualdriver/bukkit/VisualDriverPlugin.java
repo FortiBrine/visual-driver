@@ -1,7 +1,7 @@
 package me.fortibrine.visualdriver.bukkit;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import lombok.Getter;
 import me.fortibrine.visualdriver.bukkit.gui.GuiBuilder;
 import me.fortibrine.visualdriver.bukkit.gui.GuiManager;
@@ -12,23 +12,33 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VisualDriverPlugin extends JavaPlugin {
 
     @Getter private static VisualDriverPlugin instance;
-    private final GuiManager guiManager = new GuiManager(this);
+    private final GuiManager guiManager = new GuiManager();
+
+    @Override
+    public void onLoad() {
+        PacketEvents.getAPI().load();
+    }
 
     @Override
     public void onEnable() {
         instance = this;
 
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        PacketEvents.getAPI().init();
 
-        protocolManager.addPacketListener(new KeyListener(this));
-        protocolManager.addPacketListener(guiManager);
+        PacketEvents.getAPI().getEventManager().registerListener(
+                new KeyListener(),
+                PacketListenerPriority.NORMAL
+        );
+
+        PacketEvents.getAPI().getEventManager().registerListener(
+                guiManager,
+                PacketListenerPriority.NORMAL
+        );
     }
 
     @Override
     public void onDisable() {
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-
-        protocolManager.removePacketListeners(this);
+        PacketEvents.getAPI().terminate();
     }
 
     public GuiBuilder newGuiBuilder() {

@@ -1,17 +1,14 @@
 package me.fortibrine.visualdriver.bukkit.world;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.bukkit.utils.CustomPayloadPacketUtil;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class WorldContext {
-
-    private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     public WorldContext text(Player player, String id, String text, int x, int y, int z, int textColor, int backgroundColor, boolean rotation, float offsetX, float offsetY) {
         final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
@@ -27,7 +24,13 @@ public class WorldContext {
         ldoinBuffer.writeFloat(offsetX);
         ldoinBuffer.writeFloat(offsetY);
 
-        protocolManager.sendServerPacket(player, CustomPayloadPacketUtil.createServerPacket("visualdriver:text", ldoinBuffer.getBuf()));
+        PacketEvents.getAPI()
+                .getPlayerManager()
+                .sendPacket(player, new WrapperPlayServerPluginMessage(
+                        "visualdriver:text",
+                        ldoinBuffer.getBuf().array()
+                ));
+
         return this;
     }
 
