@@ -2,6 +2,7 @@ package me.fortibrine.visualdriver.bukkit;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import me.fortibrine.visualdriver.bukkit.gui.GuiBuilder;
 import me.fortibrine.visualdriver.bukkit.gui.GuiManager;
@@ -16,6 +17,7 @@ public class VisualDriverPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
     }
 
