@@ -3,34 +3,31 @@ package me.fortibrine.visualdriver.fabric.gui;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import me.fortibrine.visualdriver.fabric.mixin.ScreenAccessor;
+import me.fortibrine.visualdriver.fabric.packet.GuiActionC2SPayload;
+import me.fortibrine.visualdriver.fabric.packet.GuiPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.EditBoxWidget;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandler {
+public class GuiPacketListener implements ClientPlayNetworking.PlayPayloadHandler<GuiPayload> {
 
     private final VisualDriver mod;
 
     public GuiPacketListener(VisualDriver mod) {
         this.mod = mod;
-        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver", "gui"), this);
+        ClientPlayNetworking.registerGlobalReceiver(GuiPayload.ID, this);
     }
 
     @Override
-    public void receive(Minecraft mc, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        JNetBuffer ldoinBuffer = new JNetBuffer(buf);
+    public void receive(GuiPayload guiPayload, ClientPlayNetworking.Context context) {
+        JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.wrappedBuffer(guiPayload.data()));
 
         String menuId = ldoinBuffer.readString();
         String drawMode = ldoinBuffer.readString();
@@ -48,19 +45,16 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandle
 
                 final int finalIndex = index;
 
-                actions.add(screen -> ((ScreenAccessor) screen).addButton(
-                        new Button(x, y, width, height, new TextComponent(text), button -> {
-                            JNetBuffer ldoinClickBuffer = new JNetBuffer(Unpooled.buffer());
-
-                            ldoinClickBuffer.writeString("onPress");
-                            ldoinClickBuffer.writeString(menuId);
-                            ldoinClickBuffer.writeVarInt(finalIndex);
-
-                            ClientPlayNetworking.send(
-                                    new ResourceLocation("visualdriver", "gui"),
-                                    new FriendlyByteBuf(ldoinClickBuffer.getBuf())
-                            );
+                actions.add(screen -> screen.addDrawableChild(
+                        ButtonWidget.builder(Text.literal(text), button -> {
+                            ClientPlayNetworking.send(new GuiActionC2SPayload(
+                                    "onPress",
+                                    menuId,
+                                    finalIndex
+                            ));
                         })
+                                .dimensions(x, y, width, height)
+                                .build()
                 ));
             } else if (drawMode.equals("textbox")) {
 
@@ -70,14 +64,15 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandle
                 int height = ldoinBuffer.readVarInt();
                 String text = ldoinBuffer.readString();
 
-                actions.add(screen -> ((ScreenAccessor) screen).addButton(
-                        new EditBox(
-                                mc.font,
+                actions.add(screen -> screen.addDrawableChild(
+                        new EditBoxWidget(
+                                MinecraftClient.getInstance().textRenderer,
                                 x,
                                 y,
                                 width,
                                 height,
-                                new TextComponent(text)
+                                Text.empty(),
+                                Text.literal(text)
                         )
                 ));
             }
@@ -89,11 +84,11 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayChannelHandle
 
         String title = ldoinBuffer.readString();
 
-        ExtendedScreen screen = new ExtendedScreen(new TextComponent(title), screen1 -> {
+        ExtendedScreen screen = new ExtendedScreen(Text.literal(title), screen1 -> {
             actions.forEach(action -> action.accept(screen1));
         });
 
-        mc.setScreen(screen);
+        MinecraftClient.getInstance().setScreen(screen);
     }
 
 }

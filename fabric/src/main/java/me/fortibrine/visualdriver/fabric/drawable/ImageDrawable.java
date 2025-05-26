@@ -1,12 +1,13 @@
 package me.fortibrine.visualdriver.fabric.drawable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.Identifier;
 
 @Getter
 public class ImageDrawable implements DrawConsumer {
@@ -20,7 +21,7 @@ public class ImageDrawable implements DrawConsumer {
     private int width;
     private int height;
 
-    private final Minecraft mc = Minecraft.getInstance();
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     public ImageDrawable(String drawMode, JNetBuffer buffer) {
 
@@ -40,13 +41,11 @@ public class ImageDrawable implements DrawConsumer {
     }
 
     @Override
-    public void draw(VisualDriver mod, GuiComponent gui, PoseStack stack, float delta) {
+    public void draw(VisualDriver mod, InGameHud gui, DrawContext context, float delta) {
         if (drawMode.equals("image")) {
 
-            ResourceLocation location = mod.getImageLoader().load(url);
-
-            mc.getTextureManager().bind(location);
-            gui.blit(stack, x, y, offsetX, offsetY, width, height);
+            Identifier location = mod.getImageLoader().load(url);
+            context.drawTexture(RenderLayer::getGuiTextured, location, x, y, 14, 14, width, height, width, height);
         }
     }
 

@@ -2,7 +2,9 @@ package me.fortibrine.visualdriver.bukkit.key;
 
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import io.netty.buffer.ByteBuf;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPluginMessage;
+import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.VisualDriverPlugin;
 import me.fortibrine.visualdriver.bukkit.key.event.KeyPressEvent;
@@ -16,16 +18,19 @@ public class KeyListener implements PacketListener {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
 
-        String channel = event.getChannel().toString();
-        ByteBuf byteBuf = (ByteBuf) event.getByteBuf();
+        if (!event.getPacketType().equals(PacketType.Play.Client.PLUGIN_MESSAGE)) return;
+
+        WrapperPlayClientPluginMessage packet = new WrapperPlayClientPluginMessage(event);
+
+        String channel = packet.getChannelName();
 
         if (!channel.equals("visualdriver:key")) return;
 
-        JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
+        JNetBuffer buffer = new JNetBuffer(Unpooled.wrappedBuffer(packet.getData()));
 
-        String key = ldoinBuffer.readString();
-        int pressType = ldoinBuffer.readVarInt();
-        int modifierType = ldoinBuffer.readVarInt();
+        String key = buffer.readString();
+        int pressType = buffer.readVarInt();
+        int modifierType = buffer.readVarInt();
 
         PressType click = Arrays.stream(PressType.values())
                 .filter(type -> type.getPressType() == pressType)

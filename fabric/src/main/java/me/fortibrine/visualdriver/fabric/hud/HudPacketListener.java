@@ -1,33 +1,29 @@
 package me.fortibrine.visualdriver.fabric.hud;
 
+import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
 import me.fortibrine.visualdriver.fabric.drawable.ImageDrawable;
 import me.fortibrine.visualdriver.fabric.drawable.ItemDrawable;
 import me.fortibrine.visualdriver.fabric.drawable.RectangleDrawable;
 import me.fortibrine.visualdriver.fabric.drawable.TextDrawable;
+import me.fortibrine.visualdriver.fabric.packet.HudPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 
-public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandler {
+public class HudPacketListener implements ClientPlayNetworking.PlayPayloadHandler<HudPayload> {
 
     private final VisualDriver mod;
 
     public HudPacketListener(VisualDriver mod) {
         this.mod = mod;
-        ClientPlayNetworking.registerGlobalReceiver(new ResourceLocation("visualdriver", "hud"), this);
+        ClientPlayNetworking.registerGlobalReceiver(HudPayload.ID, this);
     }
 
     @Override
-    public void receive(Minecraft mc, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-
-        JNetBuffer ldoinBuffer = new JNetBuffer(buf);
+    public void receive(HudPayload hudPayload, ClientPlayNetworking.Context context) {
+        JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.wrappedBuffer(hudPayload.data()));
 
         mod.getHudManager().getActions().clear();
         mod.getHudManager().getDisableRender().clear();
@@ -47,4 +43,5 @@ public class HudPacketListener implements ClientPlayNetworking.PlayChannelHandle
             }
         }
     }
+
 }

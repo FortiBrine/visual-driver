@@ -1,9 +1,8 @@
 package me.fortibrine.visualdriver.fabric.event;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.util.math.MatrixStack;
 
 public interface HudRenderEvents {
 
@@ -45,9 +44,9 @@ public interface HudRenderEvents {
 
     Event<RenderExperienceBar> RENDER_EXPERIENCE_BAR = EventFactory.createArrayBacked(
             RenderExperienceBar.class,
-            (listeners) -> (stack, i) -> {
+            (listeners) -> (stack) -> {
                 for (RenderExperienceBar listener : listeners) {
-                    if (!listener.renderExperienceBar(stack, i)) {
+                    if (!listener.renderExperienceBar(stack)) {
                         return false;
                     }
                 }
@@ -57,9 +56,9 @@ public interface HudRenderEvents {
 
     Event<RenderJumpMeter> RENDER_JUMP_METER = EventFactory.createArrayBacked(
             RenderJumpMeter.class,
-            (listeners) -> (stack, i) -> {
+            (listeners) -> (stack) -> {
                 for (RenderJumpMeter listener : listeners) {
-                    if (!listener.renderJumpMeter(stack, i)) {
+                    if (!listener.renderJumpMeter(stack)) {
                         return false;
                     }
                 }
@@ -93,9 +92,9 @@ public interface HudRenderEvents {
 
     Event<RenderHotbar> RENDER_HOTBAR = EventFactory.createArrayBacked(
             RenderHotbar.class,
-            (listeners) -> (f, stack) -> {
+            (listeners) -> (stack) -> {
                 for (RenderHotbar listener : listeners) {
-                    if (!listener.renderHotbar(f, stack)) {
+                    if (!listener.renderHotbar(stack)) {
                         return false;
                     }
                 }
@@ -104,35 +103,35 @@ public interface HudRenderEvents {
     );
 
     public static interface RenderHealth {
-        boolean renderHealth(PoseStack stack);
+        boolean renderHealth(MatrixStack stack);
     }
 
     public static interface RenderVehicleHealth {
-        boolean renderVehicleHealth(PoseStack stack);
+        boolean renderVehicleHealth(MatrixStack stack);
     }
 
     public static interface RenderEffects {
-        boolean renderEffects(PoseStack stack);
+        boolean renderEffects(MatrixStack stack);
     }
 
     public static interface RenderExperienceBar {
-        boolean renderExperienceBar(PoseStack stack, int i);
+        boolean renderExperienceBar(MatrixStack stack);
     }
 
     public static interface RenderJumpMeter {
-        boolean renderJumpMeter(PoseStack stack, int i);
+        boolean renderJumpMeter(MatrixStack stack);
     }
 
     public static interface RenderSelectedItemName {
-        boolean renderSelectedItemName(PoseStack stack);
+        boolean renderSelectedItemName(MatrixStack stack);
     }
 
     public static interface RenderCrosshair {
-        boolean renderCrosshair(PoseStack stack);
+        boolean renderCrosshair(MatrixStack stack);
     }
 
     public static interface RenderHotbar {
-        boolean renderHotbar(float f, PoseStack stack);
+        boolean renderHotbar(MatrixStack stack);
     }
 
 }

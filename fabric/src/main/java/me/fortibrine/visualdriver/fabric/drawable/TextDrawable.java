@@ -1,11 +1,11 @@
 package me.fortibrine.visualdriver.fabric.drawable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ public class TextDrawable implements DrawConsumer {
     private int y;
     private int color;
 
-    private final Minecraft mc = Minecraft.getInstance();
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     public TextDrawable(String drawMode, JNetBuffer buffer) {
 
@@ -37,10 +37,10 @@ public class TextDrawable implements DrawConsumer {
     }
 
     @Override
-    public void draw(VisualDriver mod, GuiComponent gui, PoseStack stack, float delta) {
+    public void draw(VisualDriver mod, InGameHud gui, DrawContext context, float delta) {
         if (drawMode.equals("text")) {
-            mc.font.drawShadow(
-                    stack,
+            context.drawTextWithShadow(
+                    mc.textRenderer,
                     text,
                     x, y,
                     color

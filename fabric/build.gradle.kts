@@ -8,10 +8,7 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.16.5:2022.03.06@zip")
-    })
+    mappings(libs.yarn)
 
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
@@ -20,7 +17,14 @@ dependencies {
 }
 
 tasks {
-    java {
-        withSourcesJar()
+    withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+        targetCompatibility = "21"
+        sourceCompatibility = "21"
+    }
+
+    loom {
+        accessWidenerPath = file("src/main/resources/visual-driver.accesswidener")
+//        parameterMappings = true
     }
 }

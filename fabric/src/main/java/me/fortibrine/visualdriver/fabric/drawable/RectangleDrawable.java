@@ -1,11 +1,11 @@
 package me.fortibrine.visualdriver.fabric.drawable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.Getter;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +21,7 @@ public class RectangleDrawable implements DrawConsumer {
     private int y2;
     private int color;
 
-    private final Minecraft mc = Minecraft.getInstance();
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     public RectangleDrawable(String drawMode, JNetBuffer buffer) {
 
@@ -39,9 +39,9 @@ public class RectangleDrawable implements DrawConsumer {
     }
 
     @Override
-    public void draw(VisualDriver mod, GuiComponent gui, PoseStack stack, float delta) {
+    public void draw(VisualDriver mod, InGameHud gui, DrawContext context, float delta) {
         if (drawMode.equals("rectangle")) {
-            GuiComponent.fill(stack, x1, y1, x2, y2, color);
+            context.fill(x1, y1, x2, y2, color);
         }
     }
 

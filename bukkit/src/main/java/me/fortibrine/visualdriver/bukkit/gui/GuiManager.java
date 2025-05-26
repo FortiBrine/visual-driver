@@ -2,7 +2,9 @@ package me.fortibrine.visualdriver.bukkit.gui;
 
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import io.netty.buffer.ByteBuf;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPluginMessage;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
@@ -20,16 +22,19 @@ public class GuiManager implements PacketListener {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
 
-        String channel = event.getChannel().toString();
-        ByteBuf byteBuf = (ByteBuf) event.getByteBuf();
+        if (!event.getPacketType().equals(PacketType.Play.Client.PLUGIN_MESSAGE)) return;
+
+        WrapperPlayClientPluginMessage packet = new WrapperPlayClientPluginMessage(event);
+
+        String channel = packet.getChannelName();
 
         if (!channel.equals("visualdriver:gui")) return;
 
-        JNetBuffer ldoinBuffer = new JNetBuffer(byteBuf);
+        JNetBuffer buffer = new JNetBuffer(Unpooled.wrappedBuffer(packet.getData()));
 
-        String action = ldoinBuffer.readString();
-        String menuId = ldoinBuffer.readString();
-        int index = ldoinBuffer.readVarInt();
+        String action = buffer.readString();
+        String menuId = buffer.readString();
+        int index = buffer.readVarInt();
 
         List<Object> widgets = menus.getOrDefault(menuId, new ArrayList<>());
 

@@ -1,38 +1,41 @@
 package me.fortibrine.visualdriver.fabric.image;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import lombok.SneakyThrows;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.util.Identifier;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ImageLoader {
 
-    private final Map<String, ResourceLocation> loaded = new HashMap<>();
-    private final Minecraft client = Minecraft.getInstance();
+    private final Map<String, Identifier> loaded = new HashMap<>();
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     public ImageLoader() {
 
     }
 
     @SneakyThrows
-    public ResourceLocation load(String path) {
+    public Identifier load(String path) {
 
         if (loaded.containsKey(path)) {
             return loaded.get(path);
         }
 
-        NativeImage image = NativeImage.read(new URL(path).openStream());
+        String textureName = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
 
-        DynamicTexture texture = new DynamicTexture(image);
+        NativeImage image = NativeImage.read(new URL(path).openStream());
+        Identifier location = Identifier.of("visualdriver", textureName);
+        NativeImageBackedTexture texture = new NativeImageBackedTexture(() -> textureName, image);
         TextureManager textureManager = client.getTextureManager();
-        ResourceLocation location = textureManager.register("visualdriver", texture);
+        textureManager.registerTexture(location, texture);
 
         loaded.put(path, location);
 
@@ -42,7 +45,7 @@ public class ImageLoader {
     public void unload(String path) {
         if (!loaded.containsKey(path)) return;
 
-        ResourceLocation location = loaded.get(path);
+        Identifier location = loaded.get(path);
 
         AbstractTexture texture = client.getTextureManager().getTexture(location);
 
@@ -51,7 +54,7 @@ public class ImageLoader {
         }
 
         loaded.remove(path);
-        client.getTextureManager().release(location);
+        client.getTextureManager().destroyTexture(location);
     }
 
     public void clear() {

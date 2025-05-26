@@ -63,12 +63,12 @@ public class HudScreenBuilder {
 
     @SneakyThrows
     public void apply(Player player) {
-        PacketEvents.getAPI()
-                .getPlayerManager()
-                .sendPacket(player, new WrapperPlayServerPluginMessage(
-                        "visualdriver:hud",
-                        ldoinBuffer.getBuf().array()
-                ));
+            PacketEvents.getAPI()
+                    .getPlayerManager()
+                    .sendPacket(player, new WrapperPlayServerPluginMessage(
+                            "visualdriver:hud",
+                            ldoinBuffer.getBuf().array()
+                    ));
     }
 
 }
