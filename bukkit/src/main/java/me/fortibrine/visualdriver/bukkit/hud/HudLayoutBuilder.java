@@ -9,11 +9,11 @@ import me.fortibrine.visualdriver.api.JNetBuffer;
 import org.bukkit.entity.Player;
 
 @NoArgsConstructor
-public class HudScreenBuilder {
+public class HudLayoutBuilder {
 
     private final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
 
-    public HudScreenBuilder text(String text, int x, int y, int color) {
+    public HudLayoutBuilder text(String text, int x, int y, int color) {
         ldoinBuffer.writeString("text");
         ldoinBuffer.writeString(text);
         ldoinBuffer.writeVarInt(x);
@@ -22,7 +22,7 @@ public class HudScreenBuilder {
         return this;
     }
 
-    public HudScreenBuilder rectangle(int x1, int y1, int x2, int y2, int color) {
+    public HudLayoutBuilder rectangle(int x1, int y1, int x2, int y2, int color) {
         ldoinBuffer.writeString("rectangle");
         ldoinBuffer.writeVarInt(x1);
         ldoinBuffer.writeVarInt(y1);
@@ -32,7 +32,7 @@ public class HudScreenBuilder {
         return this;
     }
 
-    public HudScreenBuilder image(String url, int x, int y, int offsetX, int offsetY, int width, int height) {
+    public HudLayoutBuilder image(String url, int x, int y, int offsetX, int offsetY, int width, int height) {
         ldoinBuffer.writeString("image");
         ldoinBuffer.writeString(url);
         ldoinBuffer.writeVarInt(x);
@@ -44,7 +44,7 @@ public class HudScreenBuilder {
         return this;
     }
 
-    public HudScreenBuilder disable(DisableRender... renders) {
+    public HudLayoutBuilder disable(DisableRender... renders) {
         for (DisableRender render : renders) {
             ldoinBuffer.writeString("disable");
             ldoinBuffer.writeString(render.getName());
@@ -53,7 +53,7 @@ public class HudScreenBuilder {
         return this;
     }
 
-    public HudScreenBuilder item(String key, int x, int y) {
+    public HudLayoutBuilder item(String key, int x, int y) {
         ldoinBuffer.writeString("item");
         ldoinBuffer.writeString(key);
         ldoinBuffer.writeVarInt(x);

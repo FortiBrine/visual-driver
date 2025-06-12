@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ImageLoader {
+public class GuiImageLoader {
 
     private final Map<String, Identifier> loaded = new HashMap<>();
     private final MinecraftClient client = MinecraftClient.getInstance();
 
-    public ImageLoader() {
+    public GuiImageLoader() {
 
     }
 

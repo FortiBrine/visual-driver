@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class TextBox {
+public class GuiTextBox {
     private final int x;
     private final int y;
     private final int width;

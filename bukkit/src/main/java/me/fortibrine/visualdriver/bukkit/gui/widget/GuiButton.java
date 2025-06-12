@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 @Getter
 @AllArgsConstructor
-public class Button {
+public class GuiButton {
     private final int x;
     private final int y;
     private final int width;

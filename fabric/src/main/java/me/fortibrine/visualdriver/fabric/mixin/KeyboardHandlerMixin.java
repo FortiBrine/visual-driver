@@ -1,6 +1,6 @@
 package me.fortibrine.visualdriver.fabric.mixin;
 
-import me.fortibrine.visualdriver.fabric.event.KeyPressCallback;
+import me.fortibrine.visualdriver.fabric.event.KeyInputCallback;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -23,7 +23,7 @@ public class KeyboardHandlerMixin {
 
         InputUtil.Key key = InputUtil.fromKeyCode(keyCode, scanCode);
 
-        KeyPressCallback.EVENT.invoker().keyPress(key, arg3, modifiers, info);
+        KeyInputCallback.EVENT.invoker().keyPress(key, arg3, modifiers, info);
     }
 
 }

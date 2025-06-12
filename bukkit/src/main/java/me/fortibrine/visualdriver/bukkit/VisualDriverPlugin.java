@@ -4,16 +4,16 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
-import me.fortibrine.visualdriver.bukkit.gui.GuiBuilder;
-import me.fortibrine.visualdriver.bukkit.gui.GuiManager;
-import me.fortibrine.visualdriver.bukkit.key.KeyListener;
+import me.fortibrine.visualdriver.bukkit.gui.ScreenBuilder;
+import me.fortibrine.visualdriver.bukkit.gui.ScreenManager;
+import me.fortibrine.visualdriver.bukkit.input.BukkitKeyInputListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
 public class VisualDriverPlugin extends JavaPlugin {
 
     @Getter private static VisualDriverPlugin instance;
-    private final GuiManager guiManager = new GuiManager();
+    private final ScreenManager screenManager = new ScreenManager();
 
     @Override
     public void onLoad() {
@@ -28,12 +28,12 @@ public class VisualDriverPlugin extends JavaPlugin {
         PacketEvents.getAPI().init();
 
         PacketEvents.getAPI().getEventManager().registerListener(
-                new KeyListener(),
+                new BukkitKeyInputListener(),
                 PacketListenerPriority.NORMAL
         );
 
         PacketEvents.getAPI().getEventManager().registerListener(
-                guiManager,
+                screenManager,
                 PacketListenerPriority.NORMAL
         );
     }
@@ -43,8 +43,8 @@ public class VisualDriverPlugin extends JavaPlugin {
         PacketEvents.getAPI().terminate();
     }
 
-    public GuiBuilder newGuiBuilder() {
-        return new GuiBuilder(guiManager);
+    public ScreenBuilder newGuiBuilder() {
+        return new ScreenBuilder(screenManager);
     }
 
 }

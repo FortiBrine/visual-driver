@@ -10,7 +10,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 @Getter
-public class ImageDrawable implements DrawConsumer {
+public class ImageDrawable implements DrawableRenderer {
 
     private final String drawMode;
     private String url;
@@ -44,7 +44,7 @@ public class ImageDrawable implements DrawConsumer {
     public void draw(VisualDriver mod, InGameHud gui, DrawContext context, float delta) {
         if (drawMode.equals("image")) {
 
-            Identifier location = mod.getImageLoader().load(url);
+            Identifier location = mod.getGuiImageLoader().load(url);
             context.drawTexture(RenderLayer::getGuiTextured, location, x, y, 14, 14, width, height, width, height);
         }
     }

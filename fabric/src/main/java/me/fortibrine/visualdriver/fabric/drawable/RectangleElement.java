@@ -10,41 +10,38 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Getter
-public class TextDrawable implements DrawConsumer {
+public class RectangleElement implements DrawableRenderer {
 
     private final Logger logger = LogManager.getLogger();
 
     private final String drawMode;
-    private String text;
-    private int x;
-    private int y;
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
     private int color;
 
     private final MinecraftClient mc = MinecraftClient.getInstance();
 
-    public TextDrawable(String drawMode, JNetBuffer buffer) {
+    public RectangleElement(String drawMode, JNetBuffer buffer) {
 
         this.drawMode = drawMode;
 
-        if (!drawMode.equals("text")) {
+        if (!drawMode.equals("rectangle")) {
             return;
         }
 
-        this.text = buffer.readString();
-        this.x = buffer.readVarInt();
-        this.y = buffer.readVarInt();
+        this.x1 = buffer.readVarInt();
+        this.y1 = buffer.readVarInt();
+        this.x2 = buffer.readVarInt();
+        this.y2 = buffer.readVarInt();
         this.color = buffer.readVarInt();
     }
 
     @Override
     public void draw(VisualDriver mod, InGameHud gui, DrawContext context, float delta) {
-        if (drawMode.equals("text")) {
-            context.drawTextWithShadow(
-                    mc.textRenderer,
-                    text,
-                    x, y,
-                    color
-            );
+        if (drawMode.equals("rectangle")) {
+            context.fill(x1, y1, x2, y2, color);
         }
     }
 

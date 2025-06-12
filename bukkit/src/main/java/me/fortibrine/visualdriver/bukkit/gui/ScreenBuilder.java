@@ -4,8 +4,8 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
-import me.fortibrine.visualdriver.bukkit.gui.widget.TextBox;
+import me.fortibrine.visualdriver.bukkit.gui.widget.GuiButton;
+import me.fortibrine.visualdriver.bukkit.gui.widget.GuiTextBox;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -13,44 +13,44 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class GuiBuilder {
+public class ScreenBuilder {
 
     private final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
     private String title;
-    private final GuiManager guiManager;
+    private final ScreenManager screenManager;
     private final List<Object> widgets = new ArrayList<>();
     private final String menuId = UUID.randomUUID().toString();
 
-    public GuiBuilder(GuiManager guiManager) {
-        this.guiManager = guiManager;
+    public ScreenBuilder(ScreenManager screenManager) {
+        this.screenManager = screenManager;
 
         ldoinBuffer.writeString(menuId);
     }
 
-    public GuiBuilder title(String title) {
+    public ScreenBuilder title(String title) {
         this.title = title;
         return this;
     }
 
-    public GuiBuilder button(int x, int y, int width, int height, String text, Consumer<Player> onPress) {
+    public ScreenBuilder button(int x, int y, int width, int height, String text, Consumer<Player> onPress) {
         ldoinBuffer.writeString("button");
         ldoinBuffer.writeVarInt(x);
         ldoinBuffer.writeVarInt(y);
         ldoinBuffer.writeVarInt(width);
         ldoinBuffer.writeVarInt(height);
         ldoinBuffer.writeString(text);
-        widgets.add(new Button(x, y, width, height, text, onPress));
+        widgets.add(new GuiButton(x, y, width, height, text, onPress));
         return this;
     }
 
-    public GuiBuilder textBox(int x, int y, int width, int height, String text) {
+    public ScreenBuilder textBox(int x, int y, int width, int height, String text) {
         ldoinBuffer.writeString("textbox");
         ldoinBuffer.writeVarInt(x);
         ldoinBuffer.writeVarInt(y);
         ldoinBuffer.writeVarInt(width);
         ldoinBuffer.writeVarInt(height);
         ldoinBuffer.writeString(text);
-        widgets.add(new TextBox(x, y, width, height, text));
+        widgets.add(new GuiTextBox(x, y, width, height, text));
         return this;
     }
 
@@ -65,7 +65,7 @@ public class GuiBuilder {
                         ldoinBuffer.getBuf().array()
                 ));
 
-        guiManager.getMenus().put(
+        screenManager.getMenus().put(
                 menuId,
                 widgets
         );

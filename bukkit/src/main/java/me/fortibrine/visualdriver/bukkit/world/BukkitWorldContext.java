@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class WorldContext {
+public class BukkitWorldContext {
 
-    public WorldContext text(Player player, String id, String text, int x, int y, int z, int textColor, int backgroundColor, boolean rotation, float offsetX, float offsetY) {
+    public BukkitWorldContext text(Player player, String id, String text, int x, int y, int z, int textColor, int backgroundColor, boolean rotation, float offsetX, float offsetY) {
         final JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.buffer());
 
         ldoinBuffer.writeString(id);
@@ -34,7 +34,7 @@ public class WorldContext {
         return this;
     }
 
-    public WorldContext text(Player player, String text, int x, int y, int z, int textColor, int backgroundColor) {
+    public BukkitWorldContext text(Player player, String text, int x, int y, int z, int textColor, int backgroundColor) {
         text(player, UUID.randomUUID().toString(), text, x, y, z, textColor, backgroundColor, true, 0f, 0f);
         return this;
     }

@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
-public interface HudRenderEvents {
+public interface HudOverlayEvents {
 
     Event<RenderHealth> RENDER_HEALTH = EventFactory.createArrayBacked(
             RenderHealth.class,

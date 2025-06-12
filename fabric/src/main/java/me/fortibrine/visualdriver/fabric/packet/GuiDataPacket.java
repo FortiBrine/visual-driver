@@ -5,10 +5,10 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public record GuiPayload(byte[] data) implements CustomPayload {
-    public static final Id<GuiPayload> ID = new Id<>(Identifier.of("visualdriver", "gui"));
+public record GuiDataPacket(byte[] data) implements CustomPayload {
+    public static final Id<GuiDataPacket> ID = new Id<>(Identifier.of("visualdriver", "gui"));
 
-    public static final PacketCodec<RegistryByteBuf, GuiPayload> CODEC =
+    public static final PacketCodec<RegistryByteBuf, GuiDataPacket> CODEC =
             PacketCodec.of(
                     (payload, buf) -> {
                         buf.writeBytes(payload.data());
@@ -16,7 +16,7 @@ public record GuiPayload(byte[] data) implements CustomPayload {
                     buf -> {
                         byte[] remaining = new byte[buf.readableBytes()];
                         buf.readBytes(remaining);
-                        return new GuiPayload(remaining);
+                        return new GuiDataPacket(remaining);
                     }
             );
 

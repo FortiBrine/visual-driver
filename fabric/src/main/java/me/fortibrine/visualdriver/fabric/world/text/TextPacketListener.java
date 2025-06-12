@@ -48,17 +48,6 @@ public class TextPacketListener implements ClientPlayNetworking.PlayPayloadHandl
                     MatrixStack pose = context.matrixStack();
                     pose.push();
 
-                    System.out.println(id);
-                    System.out.println(x);
-                    System.out.println(y);
-                    System.out.println(z);
-                    System.out.println(text);
-                    System.out.println(textColor);
-                    System.out.println(backgroundColor);
-                    System.out.println(rotation);
-                    System.out.println(offsetX);
-                    System.out.println(offsetY);
-
                     Vec3d camera = context.camera().getPos();
                     pose.translate(-camera.x, -camera.y, -camera.z);
                     pose.translate(x, y, z);

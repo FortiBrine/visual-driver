@@ -7,7 +7,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import me.fortibrine.visualdriver.api.JNetBuffer;
-import me.fortibrine.visualdriver.bukkit.gui.widget.Button;
+import me.fortibrine.visualdriver.bukkit.gui.widget.GuiButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class GuiManager implements PacketListener {
+public class ScreenManager implements PacketListener {
 
     private final Map<String, List<Object>> menus = new HashMap<>();
 
@@ -39,10 +39,10 @@ public class GuiManager implements PacketListener {
         List<Object> widgets = menus.getOrDefault(menuId, new ArrayList<>());
 
         if (action.equals("onPress")) {
-            if (index < widgets.size() && widgets.get(index) instanceof Button) {
-                Button button = (Button) widgets.get(index);
+            if (index < widgets.size() && widgets.get(index) instanceof GuiButton) {
+                GuiButton guiButton = (GuiButton) widgets.get(index);
 
-                button.getOnPress().accept(event.getPlayer());
+                guiButton.getOnPress().accept(event.getPlayer());
             }
         }
     }

@@ -3,8 +3,8 @@ package me.fortibrine.visualdriver.fabric.gui;
 import io.netty.buffer.Unpooled;
 import me.fortibrine.visualdriver.api.JNetBuffer;
 import me.fortibrine.visualdriver.fabric.VisualDriver;
-import me.fortibrine.visualdriver.fabric.packet.GuiActionC2SPayload;
-import me.fortibrine.visualdriver.fabric.packet.GuiPayload;
+import me.fortibrine.visualdriver.fabric.packet.ClientGuiActionPacket;
+import me.fortibrine.visualdriver.fabric.packet.GuiDataPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,18 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GuiPacketListener implements ClientPlayNetworking.PlayPayloadHandler<GuiPayload> {
+public class GuiPacketHandler implements ClientPlayNetworking.PlayPayloadHandler<GuiDataPacket> {
 
     private final VisualDriver mod;
 
-    public GuiPacketListener(VisualDriver mod) {
+    public GuiPacketHandler(VisualDriver mod) {
         this.mod = mod;
-        ClientPlayNetworking.registerGlobalReceiver(GuiPayload.ID, this);
+        ClientPlayNetworking.registerGlobalReceiver(GuiDataPacket.ID, this);
     }
 
     @Override
-    public void receive(GuiPayload guiPayload, ClientPlayNetworking.Context context) {
-        JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.wrappedBuffer(guiPayload.data()));
+    public void receive(GuiDataPacket guiDataPacket, ClientPlayNetworking.Context context) {
+        JNetBuffer ldoinBuffer = new JNetBuffer(Unpooled.wrappedBuffer(guiDataPacket.data()));
 
         String menuId = ldoinBuffer.readString();
         String drawMode = ldoinBuffer.readString();
@@ -47,7 +47,7 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayPayloadHandle
 
                 actions.add(screen -> screen.addDrawableChild(
                         ButtonWidget.builder(Text.literal(text), button -> {
-                            ClientPlayNetworking.send(new GuiActionC2SPayload(
+                            ClientPlayNetworking.send(new ClientGuiActionPacket(
                                     "onPress",
                                     menuId,
                                     finalIndex
@@ -84,7 +84,7 @@ public class GuiPacketListener implements ClientPlayNetworking.PlayPayloadHandle
 
         String title = ldoinBuffer.readString();
 
-        ExtendedScreen screen = new ExtendedScreen(Text.literal(title), screen1 -> {
+        CustomGuiScreen screen = new CustomGuiScreen(Text.literal(title), screen1 -> {
             actions.forEach(action -> action.accept(screen1));
         });
 

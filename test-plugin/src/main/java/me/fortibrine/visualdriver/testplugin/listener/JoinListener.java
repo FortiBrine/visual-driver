@@ -3,8 +3,8 @@ package me.fortibrine.visualdriver.testplugin.listener;
 import lombok.AllArgsConstructor;
 import me.fortibrine.visualdriver.bukkit.VisualDriverPlugin;
 import me.fortibrine.visualdriver.bukkit.hud.DisableRender;
-import me.fortibrine.visualdriver.bukkit.hud.HudScreenBuilder;
-import me.fortibrine.visualdriver.bukkit.world.WorldContext;
+import me.fortibrine.visualdriver.bukkit.hud.HudLayoutBuilder;
+import me.fortibrine.visualdriver.bukkit.world.BukkitWorldContext;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,14 +21,14 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
         plugin.getServer().getScheduler().runTaskLater(plugin,
                 () -> {
-                    new HudScreenBuilder()
+                    new HudLayoutBuilder()
                             .rectangle(0, 0, 80, 40, 0xFFFFFFFF)
                             .text("HUD RENDER TEXT", 10, 10, 0xFF000000)
                             .disable(DisableRender.RENDER_EXPERIENCE_BAR)
                             .item("minecraft:apple", 50, 50)
                             .image("https://docs.fabricmc.net/assets/develop/rendering/draw-context-recipe-book-background.png", 30, 30, 0, 0, 256, 256)
                             .apply(player);
-                    new WorldContext()
+                    new BukkitWorldContext()
                             .text(player, "hello, world", 100, 100, 100, 0xFFFFFFFF, 0);
                     VisualDriverPlugin.getInstance().newGuiBuilder()
                             .title("test")

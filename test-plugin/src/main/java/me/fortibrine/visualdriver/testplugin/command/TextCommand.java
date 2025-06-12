@@ -1,6 +1,6 @@
 package me.fortibrine.visualdriver.testplugin.command;
 
-import me.fortibrine.visualdriver.bukkit.world.WorldContext;
+import me.fortibrine.visualdriver.bukkit.world.BukkitWorldContext;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +25,7 @@ public class TextCommand implements CommandExecutor {
             return false;
         }
 
-        new WorldContext()
+        new BukkitWorldContext()
                 .text((Player) sender, args[0], x, y, z, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
         return true;

@@ -2,10 +2,6 @@ plugins {
     alias(libs.plugins.fabric.loom)
 }
 
-repositories {
-    maven("https://maven.parchmentmc.org")
-}
-
 dependencies {
     minecraft(libs.minecraft)
     mappings(libs.yarn)

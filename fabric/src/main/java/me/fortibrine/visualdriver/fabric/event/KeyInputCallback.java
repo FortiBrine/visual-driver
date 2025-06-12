@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.util.InputUtil;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public interface KeyPressCallback {
-    Event<KeyPressCallback> EVENT = EventFactory.createArrayBacked(
-            KeyPressCallback.class,
+public interface KeyInputCallback {
+    Event<KeyInputCallback> EVENT = EventFactory.createArrayBacked(
+            KeyInputCallback.class,
             (listeners) -> (key, arg0, modifiers, info) -> {
-                for (KeyPressCallback listener : listeners) {
+                for (KeyInputCallback listener : listeners) {
                     listener.keyPress(key, arg0, modifiers, info);
                 }
             }

@@ -5,10 +5,10 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public record HudPayload(byte[] data) implements CustomPayload {
-    public static final CustomPayload.Id<HudPayload> ID = new CustomPayload.Id<>(Identifier.of("visualdriver", "hud"));
+public record HudDataPacket(byte[] data) implements CustomPayload {
+    public static final CustomPayload.Id<HudDataPacket> ID = new CustomPayload.Id<>(Identifier.of("visualdriver", "hud"));
 
-    public static final PacketCodec<RegistryByteBuf, HudPayload> CODEC =
+    public static final PacketCodec<RegistryByteBuf, HudDataPacket> CODEC =
             PacketCodec.of(
                     (payload, buf) -> {
                         buf.writeBytes(payload.data());
@@ -16,7 +16,7 @@ public record HudPayload(byte[] data) implements CustomPayload {
                     buf -> {
                         byte[] remaining = new byte[buf.readableBytes()];
                         buf.readBytes(remaining);
-                        return new HudPayload(remaining);
+                        return new HudDataPacket(remaining);
                     }
             );
 

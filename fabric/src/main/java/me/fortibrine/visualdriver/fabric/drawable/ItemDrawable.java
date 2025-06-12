@@ -12,7 +12,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 @Getter
-public class ItemDrawable implements DrawConsumer {
+public class ItemDrawable implements DrawableRenderer {
 
     private final String drawMode;
     private String key;

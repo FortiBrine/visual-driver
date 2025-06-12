@@ -6,11 +6,11 @@ import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
 
-public class ExtendedScreen extends Screen {
+public class CustomGuiScreen extends Screen {
 
     private final Consumer<Screen> consumer;
 
-    public ExtendedScreen(Text component, Consumer<Screen> consumer) {
+    public CustomGuiScreen(Text component, Consumer<Screen> consumer) {
         super(component);
 
         this.consumer = consumer;
