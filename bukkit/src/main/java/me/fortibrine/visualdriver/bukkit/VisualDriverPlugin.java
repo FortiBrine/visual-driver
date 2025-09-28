@@ -7,6 +7,7 @@ import lombok.Getter;
 import me.fortibrine.visualdriver.bukkit.gui.ScreenBuilder;
 import me.fortibrine.visualdriver.bukkit.gui.ScreenManager;
 import me.fortibrine.visualdriver.bukkit.input.BukkitKeyInputListener;
+import me.fortibrine.visualdriver.bukkit.player.PlayerManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -14,6 +15,7 @@ public class VisualDriverPlugin extends JavaPlugin {
 
     @Getter private static VisualDriverPlugin instance;
     private final ScreenManager screenManager = new ScreenManager();
+    private PlayerManager playerManager;
 
     @Override
     public void onLoad() {
@@ -36,6 +38,8 @@ public class VisualDriverPlugin extends JavaPlugin {
                 screenManager,
                 PacketListenerPriority.NORMAL
         );
+
+        this.playerManager = new PlayerManager();
     }
 
     @Override
